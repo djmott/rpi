@@ -1,3 +1,10 @@
-/toolchain/*
-!/toolchain/src/.config
+/toolchain/armv8-rpi3-linux-gnueabihf 
+/toolchain/bin
+/toolchain/lib
+/toolchain/libexec
+/toolchain/src/config.gen
+/toolchain/src/build.log
+/toolchain/src/.build
+/toolchain/src/.config.old
+/toolchain/src/config
 .rpi.conf
