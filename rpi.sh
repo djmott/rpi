@@ -19,6 +19,9 @@ main(){
   export _RPI_ROOTFS=${_RPI_ROOTFS:-"$_RPI_DIR"/rootfs}
   export _RPI_TMP=${_RPI_TMP:-"$_RPI_DIR"/.tmp}
   export _RPI_DOWNLOADS=${_RPI_DOWNLOADS:-"$_RPI_DIR"/.download}
+  export _RPI_ARCH_SUFFIX=${_RPI_ARCH_SUFFIX:-v8}
+  export _RPI_CPU=${_RPI_CPU:-cortex-a53}
+  export _RPI_FPU=${_RPI_FPU:-neon-vfpv4}
   export PATH="$_RPI_TOOLCHAIN"/bin:$PATH
   mkdir -p "$_RPI_ROOTFS"/{dev,proc,run,sys,usr/bin} "$_RPI_TMP" "$_RPI_DOWNLOADS"
   set +e
@@ -86,7 +89,8 @@ bootstrap(){
 }
 
 bootstrap-toolchain(){
-  echo "bootstrap-toolchain"
+  cd "$_RPI_TOOLCHAIN"/src
+  ct-ng build
 }
 
 bootstrap-rootfs(){
