@@ -13,7 +13,7 @@ main(){
 	export _Y="$(tput setaf 3)"
 	export _B="$(tput setaf 4)"
 	export _Z="$(tput sgr0)"
-  export _RPI_TARGET=${_RPI_TARGET:-armv8-rpi3-linux-gnueabihf}
+  export _RPI_TARGET=${_RPI_TARGET:-armv8-rpi3-linux-gnueabi}
   export _RPI_TOOLCHAIN=${_RPI_TOOLCHAIN:-"$_RPI_DIR"/toolchain}
   export _RPI_SYSROOT=${_RPI_SYSROOT:-"$_RPI_TOOLCHAIN"/$_RPI_TARGET/sysroot}
   export _RPI_ROOTFS=${_RPI_ROOTFS:-"$_RPI_DIR"/rootfs}
@@ -83,6 +83,44 @@ ${_Y}$(printenv | sort | grep "^_RPI_")${_Z}
   
   bash -norc -noprofile
 }
+
+bgprocess(){
+  local _msg="$1"
+  shift
+  ($*) > /dev/null 2>&1 &
+  local _pid=$!
+
+  local _spin='-\|/'
+
+  local i=0
+  while kill -0 $_pid 2>/dev/null; do
+    i=$(( (i+1) %4 ))
+    printf "\r$_Y $_msg ${_spin:$i:1} $_Z"
+    sleep .1
+  done
+  wait $_pid
+  echo ""
+}
+
+
+
+bgdelete(){
+  if [ ! -e "$1" ]; then return 0; fi
+  #santiy check, ensure deleting only a project subdirectory
+  for item in "$*"; do
+    local tmpdir=${item:0:${#B}}
+    if [ "$B" !=  "$tmpdir" ]; then
+      echo -e "$_R ERROR $_Z attempt to delete an invalid directory or file:"
+      echo -e "$_Y $1 $_Z"
+      return 2
+    fi
+  done
+  local tmpdir=$(mktemp -d -p "$B"/.tmp)
+  mv $* $tmpdir
+  rm -rf $tmpdir > /dev/null &
+}
+
+
 
 bootstrap(){
   bootstrap-$*

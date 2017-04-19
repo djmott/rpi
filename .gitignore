@@ -1,4 +1,9 @@
-/toolchain/armv8-rpi3-linux-gnueabihf 
+/.download
+/.tmp
+/toolchain/armv8-rpi3-linux-gnueabi
+/toolchain/build.log.bz2
+/toolchain/include
+/toolchain/share
 /toolchain/bin
 /toolchain/lib
 /toolchain/libexec
